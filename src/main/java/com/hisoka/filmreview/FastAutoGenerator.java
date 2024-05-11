@@ -19,7 +19,7 @@ import java.util.Collections;
  */
 public class FastAutoGenerator {
     public static void main(String[] args) {
-        String[] tables = {"user","film","film_score","film_chain_score","film_comment"};
+        String[] tables = {"user","film","film_score","film_chain_score","film_comment","city","cinema_info","cinema_screening","film_order"};
         com.baomidou.mybatisplus.generator.FastAutoGenerator.create("jdbc:mysql://182.92.78.180:3306/film_review?useUnicode=true&characterEncoding=UTF-8&useSSL=false", "root", "Miaobu123456_")
                 .globalConfig(builder -> {
                     builder.author("Hisoka") // 设置作者
