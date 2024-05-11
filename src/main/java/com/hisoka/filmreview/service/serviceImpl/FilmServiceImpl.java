@@ -42,4 +42,13 @@ public class FilmServiceImpl extends ServiceImpl<FilmMapper, Film> implements Fi
         film.setCover(QiNiu.getUrl("cover",film.getCover()));
         return Result.ok(film);
     }
+
+    @Override
+    public Result getFilmDetailByName(String name) {
+        Film film = filmMapper.selectOne(new QueryWrapper<Film>().eq("film_name", name));
+        if(film == null){
+            return Result.fail("不存在该电影！");
+        }
+        return Result.ok(film.getId());
+    }
 }

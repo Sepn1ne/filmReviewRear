@@ -46,16 +46,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result getCode(String email) {
-        //0.如果邮箱为空则返回错误
+        //1.如果邮箱为空则返回错误
         if(email == null){
             return Result.fail("邮箱为空！");
         }
-        //1.生成一个验证码
+        //2. 判断该邮箱是否已经注册
+        Integer count = userMapper.selectCount(new QueryWrapper<User>().eq("email", email));
+        if(count >= 1){
+            return Result.fail("该邮箱已注册！");
+        }
+        //3.生成一个验证码
         String code = RandomUtil.randomNumbers(6);
         System.out.println(code);
-        //2.将该验证码作为redis的值生成Redis的键
+        //4.将该验证码作为redis的值生成Redis的键
         String key = RedisConstants.LOGIN_CODE + email;
-        //3.将该键值对存入Redis，并设置有效时间
+        //5.将该键值对存入Redis，并设置有效时间
         stringRedisTemplate.opsForValue().set(key,code, Duration.ofSeconds(60));
         return Result.ok();
     }
@@ -100,14 +105,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = userMapper.selectOne(userQueryWrapper);
         if(user == null){
             return Result.fail("登陆失败！不存在该用户");
-        }else{
-            //2. 若用户存在，则渲染用户的头像
-            String url = QiNiu.getUrl("head",user.getIcon());
-            System.out.println("头像链接:" + url);
-            user.setIcon(url);
-            return Result.ok(user);
         }
-
+        // else{
+        //     //2. 若用户存在，则渲染用户的头像
+        //     String url = QiNiu.getUrl("head",user.getIcon());
+        //     System.out.println("头像链接:" + url);
+        //     user.setIcon(url);
+        //     return Result.ok(user);
+        // }
+        return Result.ok(user);
     }
 
     @Override

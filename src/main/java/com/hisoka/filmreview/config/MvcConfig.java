@@ -2,6 +2,7 @@ package com.hisoka.filmreview.config;
 
 import com.hisoka.filmreview.utils.LoginInterceptor;
 import com.hisoka.filmreview.utils.RefreshTokenInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -38,8 +39,8 @@ public class MvcConfig implements WebMvcConfigurer {
                         "/film/**",
                         "/user/**",
                         "/filmScore/**",
-                        "/filmChainScore/**",
-                        "/filmComment/**"
+                        "/filmChainScore/**"
+                        //"/filmComment/**"
                 ).order(1);
 
 

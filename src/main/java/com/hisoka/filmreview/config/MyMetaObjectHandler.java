@@ -28,6 +28,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         //倘若只出现create行代码，则只有在 fill = FieldFill.INSERT 才会自动填入！
         this.strictInsertFill(metaObject, "createTime", Timestamp.class, new Timestamp(System.currentTimeMillis())); // 起始版本 3.3.0(推荐使用)
         this.strictUpdateFill(metaObject, "updateTime", Timestamp.class, new Timestamp(System.currentTimeMillis()));
+        //插入时候自动填充deleted = 0;
+        this.strictInsertFill(metaObject,"deleted",Integer.class,0);
 
     }
 

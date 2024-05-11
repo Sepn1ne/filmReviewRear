@@ -20,4 +20,6 @@ import java.io.UnsupportedEncodingException;
 public interface FilmService extends IService<Film> {
     public IPage<Film> pageById(Page<Film> page, QueryWrapper<Film> queryWrapper);
     public Result getFilmDetailById(int id) throws UnsupportedEncodingException;
+
+    public Result getFilmDetailByName(String name) throws UnsupportedEncodingException;
 }

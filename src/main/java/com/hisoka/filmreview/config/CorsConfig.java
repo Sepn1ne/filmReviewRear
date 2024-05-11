@@ -16,6 +16,7 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedMethods("POST","GET","PUT","OPTIONS","DELETE")
                 .maxAge(168000)    //预检间隔时间
                 .allowedHeaders("*") //允许头部设置
+                .exposedHeaders("*")
                 .allowCredentials(true); //是否允许发送cookie
     }
 }

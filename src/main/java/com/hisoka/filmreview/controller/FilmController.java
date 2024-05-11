@@ -59,5 +59,10 @@ public class FilmController {
     public Result getFilmInfoById(@PathVariable int id) throws UnsupportedEncodingException {
         return filmService.getFilmDetailById(id);
     }
+
+    @GetMapping("/name/{filmName}")
+    public Result getFilmInfoByName(@PathVariable String filmName) throws UnsupportedEncodingException {
+        return filmService.getFilmDetailByName(filmName);
+    }
 }
 
