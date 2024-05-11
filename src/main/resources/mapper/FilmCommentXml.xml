@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hisoka.filmreview.mapper.FilmCommentMapper">
+
+    <select id="getFilmCommentPageOrderByUp" resultType="com.hisoka.filmreview.entity.FilmComment">
+        SELECT f.id           id,
+               u.id           userId,
+               u.nick_name    nickName,
+               u.icon         icon,
+               f.film_id,
+               f.score        score,
+               f.scored       scored,
+               f.commented    commented,
+               f.title        title,
+               f.content      content,
+               f.publish_time publish_time,
+               f.up           up,
+               f.down         down,
+               f.create_time  create_time,
+               f.update_time  update_time
+        FROM `film_comment` f
+                 JOIN `user` u ON f.film_id = #{filmId}
+        WHERE f.user_id = u.id
+          and deleted = 0
+        ORDER BY f.up DESC LIMIT 8
+        OFFSET #{offset}
+    </select>
+
+    <select id="getFilmCommentPageOrderByPub" resultType="com.hisoka.filmreview.entity.FilmComment">
+        SELECT f.id           id,
+               u.id           userId,
+               u.nick_name    nickName,
+               u.icon         icon,
+               f.film_id,
+               f.score        score,
+               f.scored       scored,
+               f.commented    commented,
+               f.title        title,
+               f.content      content,
+               f.publish_time publish_time,
+               f.up           up,
+               f.down         down,
+               f.create_time  create_time,
+               f.update_time  update_time
+        FROM `film_comment` f
+                 JOIN `user` u ON f.film_id = #{filmId}
+        WHERE f.user_id = u.id
+          and deleted = 0
+        ORDER BY f.publish_time DESC LIMIT 8
+        OFFSET #{offset}
+    </select>
+    <select id="getTop5ByFilmId" resultType="com.hisoka.filmreview.entity.FilmComment">
+        SELECT f.id           id,
+               u.id           userId,
+               u.nick_name    nickName,
+               u.icon         icon,
+               f.film_id,
+               f.score        score,
+               f.scored       scored,
+               f.commented    commented,
+               f.title        title,
+               f.content      content,
+               f.publish_time publish_time,
+               f.up           up,
+               f.down         down,
+               f.create_time  create_time,
+               f.update_time  update_time
+        FROM `film_comment` f
+                 JOIN `user` u ON f.film_id = #{filmId}
+        WHERE f.user_id = u.id and deleted = 0
+        ORDER BY f.up DESC  LIMIT 5
+    </select>
+</mapper>
