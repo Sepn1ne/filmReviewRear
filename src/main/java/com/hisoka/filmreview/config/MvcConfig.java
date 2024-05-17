@@ -39,8 +39,9 @@ public class MvcConfig implements WebMvcConfigurer {
                         "/film/**",
                         "/user/**",
                         "/filmScore/**",
-                        "/filmChainScore/**"
-                        //"/filmComment/**"
+                        "/filmChainScore/**",
+                        "/swagger-ui.html/**",
+                        "/filmComment/top5/**"
                 ).order(1);
 
 

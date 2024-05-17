@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hisoka.filmreview.dto.Result;
 import com.hisoka.filmreview.dto.UserDTO;
 import com.hisoka.filmreview.entity.FilmComment;
+import com.hisoka.filmreview.entity.FilmOrder;
 import com.hisoka.filmreview.mapper.FilmCommentMapper;
+import com.hisoka.filmreview.mapper.FilmOrderMapper;
 import com.hisoka.filmreview.service.FilmCommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hisoka.filmreview.utils.QiNiu;
@@ -30,6 +32,9 @@ public class FilmCommentServiceImpl extends ServiceImpl<FilmCommentMapper, FilmC
 
     @Resource
     private FilmCommentMapper filmCommentMapper;
+
+    @Resource
+    private FilmOrderMapper filmOrderMapper;
 
     @Override
     public Result getFilmCommentByUp(Long filmId, Integer page) throws UnsupportedEncodingException {
@@ -88,13 +93,16 @@ public class FilmCommentServiceImpl extends ServiceImpl<FilmCommentMapper, FilmC
         //2.1若用户未发表过点评或评分，则上传filmComment
         if(one == null){
             filmComment.setScored(0);
+            filmComment.setCommented(1);
             filmCommentMapper.insert(filmComment);
             return Result.ok();
         }
         //2.2若用户发表过评分但未发表评论，则填充用户的评论
         else if(one.getScored() == 1 && one.getCommented() == 0){
-            filmComment.setScored(1);
+            filmComment.setScored(one.getScored());
             filmComment.setScore(one.getScore());
+            filmComment.setCommented(1);
+            filmComment.setId(one.getId());
             filmCommentMapper.updateById(filmComment);
             return Result.ok();
         }
@@ -116,11 +124,13 @@ public class FilmCommentServiceImpl extends ServiceImpl<FilmCommentMapper, FilmC
         filmComment.setUserId(user.getId());
         filmComment.setPublishTime(LocalDateTime.now());
 
+
         //2.查询用户是否已经评分或者点评
         FilmComment one = filmCommentMapper.selectOne(new QueryWrapper<FilmComment>().eq("user_id", user.getId()).eq("film_id", filmComment.getFilmId()));
         //2.1若用户未发表过点评或评分，则上传filmComment
         if(one == null){
-            filmComment.setScored(0);
+            filmComment.setScored(1);
+            filmComment.setCommented(0);
             filmCommentMapper.insert(filmComment);
             return Result.ok();
         }
@@ -140,6 +150,14 @@ public class FilmCommentServiceImpl extends ServiceImpl<FilmCommentMapper, FilmC
     @Override
     public Result getTop5ByFilmId(Long filmId) {
         List<FilmComment> filmCommentList = filmCommentMapper.getTop5ByFilmId(filmId);
+        for(FilmComment f : filmCommentList){
+            Long userId = f.getUserId();
+            if(filmOrderMapper.getHasPurchase(userId,filmId)>=1){
+                f.setHasPurchase(true);
+            }else{
+                f.setHasPurchase(false);
+            }
+        }
         return Result.ok(filmCommentList);
     }
 }

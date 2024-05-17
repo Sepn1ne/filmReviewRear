@@ -46,6 +46,10 @@ public class FilmComment implements Serializable {
     @TableField(exist = false)
     private String nickName;
 
+    @ApiModelProperty("该用户是否购票")
+    @TableField(exist = false)
+    private Boolean hasPurchase;
+
     @ApiModelProperty("电影id")
     @TableField("film_id")
     private Long filmId;

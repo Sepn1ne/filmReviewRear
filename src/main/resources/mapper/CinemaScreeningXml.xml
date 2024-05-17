@@ -2,4 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hisoka.filmreview.mapper.CinemaScreeningMapper">
 
+    <select id="getStockByDistrictId" resultType="com.hisoka.filmreview.dto.CinemaScreeningDto">
+        SELECT
+            cs.id id,
+            ci.NAME cinema_name,
+            cs.start_time start_time,
+            cs.end_time end_time,
+            cs.stock stock
+        FROM
+            cinema_info ci
+                JOIN cinema_screening cs ON ci.id = cs.cinema_id
+        WHERE
+            ci.district_id = #{districtId} and cs.film_id = #{filmId} and cs.start_time >= #{startTime} and cs.start_time &lt; #{endTime}
+    </select>
 </mapper>

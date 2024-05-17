@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,8 +35,8 @@ public class FilmOrder implements Serializable {
     @TableField("user_id")
     private Long userId;
 
-    @TableField("film_screening_id")
-    private Long filmScreeningId;
+    @TableField("cinema_screening_id")
+    private Long cinemaScreeningId;
 
     @TableField("purchase_time")
     private LocalDateTime purchaseTime;
@@ -48,12 +49,12 @@ public class FilmOrder implements Serializable {
     private Integer status;
 
     @TableField(value = "create_time", fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    private Timestamp createTime;
 
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
+    private Timestamp updateTime;
 
-    @TableField("deleted")
+    @TableField(value = "deleted", fill = FieldFill.INSERT)
     @TableLogic
     private Integer deleted;
 

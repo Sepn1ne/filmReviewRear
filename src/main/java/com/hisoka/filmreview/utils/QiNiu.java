@@ -16,7 +16,7 @@ import java.net.URLEncoder;
 public class QiNiu {
     public static String getUrl(String filePos, String coverName) throws UnsupportedEncodingException {
         String fileName = "film_review/" + filePos + "/" + coverName;
-        String domainOfBucket = "http://sc0k96wge.hd-bkt.clouddn.com";
+        String domainOfBucket = "http://sdkcya4ll.hd-bkt.clouddn.com";
         String encodedFileName = URLEncoder.encode(fileName, "utf-8").replace("+", "%20");
         String publicUrl = String.format("%s/%s", domainOfBucket, encodedFileName);
         String accessKey = "ICQuP4YAErcSNKJzhzPxDYs_RVXhl8S0JpUBU_Gt";

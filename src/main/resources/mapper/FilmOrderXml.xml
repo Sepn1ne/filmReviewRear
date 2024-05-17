@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hisoka.filmreview.mapper.FilmOrderMapper">
 
+    <select id="getHasPurchase" resultType="java.lang.Integer">
+        select count(*)
+        from film_order fo
+                 left join cinema_screening cs on fo.cinema_screening_id = cs.id
+        where fo.user_id = #{userId}
+          and cs.film_id = #{filmId}
+    </select>
 </mapper>

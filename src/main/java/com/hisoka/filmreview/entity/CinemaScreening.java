@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -36,6 +38,10 @@ public class CinemaScreening implements Serializable {
 
     @TableField("film_id")
     private Long filmId;
+
+    @TableField("stock")
+    private Integer stock;
+
 
     @TableField("start_time")
     private LocalDateTime startTime;
