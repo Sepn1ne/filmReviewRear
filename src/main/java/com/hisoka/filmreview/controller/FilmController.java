@@ -4,6 +4,7 @@ package com.hisoka.filmreview.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hisoka.filmreview.dto.AbstractFilm;
 import com.hisoka.filmreview.dto.Result;
 import com.hisoka.filmreview.entity.Film;
@@ -42,7 +43,7 @@ public class FilmController {
     @GetMapping("/page/{page}")
     public Result pageById(@PathVariable int page) throws InvocationTargetException, IllegalAccessException, UnsupportedEncodingException {
         QueryWrapper<Film> queryWrapper = new QueryWrapper<>();
-        IPage<Film> pages = filmService.pageById(new Page<>(page, 8), queryWrapper);
+        IPage<Film> pages = filmService.pageByPage(new Page<>(page, 8), queryWrapper);
         List<AbstractFilm> list = new ArrayList<>();
         for(Film f : pages.getRecords()){
             log.info(f.toString());
@@ -56,7 +57,7 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public Result getFilmInfoById(@PathVariable int id) throws UnsupportedEncodingException {
+    public Result getFilmInfoById(@PathVariable int id) throws UnsupportedEncodingException, JsonProcessingException {
         return filmService.getFilmDetailById(id);
     }
 

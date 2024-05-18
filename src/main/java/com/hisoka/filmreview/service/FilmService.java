@@ -3,6 +3,7 @@ package com.hisoka.filmreview.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hisoka.filmreview.dto.Result;
 import com.hisoka.filmreview.entity.Film;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,8 +19,10 @@ import java.io.UnsupportedEncodingException;
  * @since 2024-04-19
  */
 public interface FilmService extends IService<Film> {
-    public IPage<Film> pageById(Page<Film> page, QueryWrapper<Film> queryWrapper);
-    public Result getFilmDetailById(int id) throws UnsupportedEncodingException;
+    IPage<Film> pageByPage(Page<Film> page, QueryWrapper<Film> queryWrapper);
+    Result getFilmDetailById(int id) throws UnsupportedEncodingException, JsonProcessingException;
 
-    public Result getFilmDetailByName(String name) throws UnsupportedEncodingException;
+    Result updateFilmDetail(Film film);
+
+    Result getFilmDetailByName(String name) throws UnsupportedEncodingException;
 }

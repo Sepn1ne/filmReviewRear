@@ -1,6 +1,7 @@
 package com.hisoka.filmreview.service;
 
 import com.hisoka.filmreview.dto.Result;
+import com.hisoka.filmreview.dto.UserDTO;
 import com.hisoka.filmreview.entity.FilmOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,5 +14,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2024-05-11
  */
 public interface FilmOrderService extends IService<FilmOrder> {
-    public Result createOrder(Long csId);
+    //创建订单
+    Result createOrder(Long csId);
+    //将订单插入到数据库
+    Integer insertOrder2Database(FilmOrder order);
 }
