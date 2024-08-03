@@ -25,4 +25,7 @@ public interface FilmService extends IService<Film> {
     Result updateFilmDetail(Film film);
 
     Result getFilmDetailByName(String name) throws UnsupportedEncodingException;
+
+    //将电影评分表中的评分同步到电影表中
+    void synchFilmScore();
 }

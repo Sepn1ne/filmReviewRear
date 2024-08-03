@@ -63,7 +63,7 @@ public class FilmOrderServiceImpl extends ServiceImpl<FilmOrderMapper, FilmOrder
         if(user == null){
             return Result.fail("用户未登录！");
         }
-        //2.利用lua脚本判断当前的上映电影是否有库存
+        //2.利用lua脚本判断当前的上映电影是否有库存,若有库存则扣减
         //lua脚本所需要的参数为:csId
         Long result = stringRedisTemplate.execute(
                 CREATE_ORDER_SCRIPT,
@@ -71,13 +71,11 @@ public class FilmOrderServiceImpl extends ServiceImpl<FilmOrderMapper, FilmOrder
                 csId.toString(),user.getId().toString()
         );
         int r = result.intValue();
-
         // 2.判断结果是否为0
         if (r != 0) {
             // 2.1.不为0 ，代表没有购买资格
             return Result.fail(r == 1 ? "不存在该上映信息" : "库存不足");
         }
-
         // 3. 结果为0表示成功下单
         //生成订单
         FilmOrder order = new FilmOrder();
@@ -89,7 +87,7 @@ public class FilmOrderServiceImpl extends ServiceImpl<FilmOrderMapper, FilmOrder
         order.setId(s);
         log.info("订单创建成功");
 
-        //利用EventProducer发送消息给rabbitmq，让rabbitmq对数据库进行修改
+        // 4. 利用EventProducer发送消息给rabbitmq，让rabbitmq对数据库进行修改
         eventProducer.sendMessage(RabbitConfig.ORDER_EXCHANGE_NAME, RabbitConfig.ORDER_ROUTING_KEY, order);
 
         // 5. 返回订单id

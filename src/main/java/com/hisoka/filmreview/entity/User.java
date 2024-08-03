@@ -40,6 +40,17 @@ public class User implements Serializable {
     @TableField("email")
     private String email;
 
+    public User() {
+    }
+
+    public User(Long id, String nickName, String email, String password, String icon) {
+        this.id = id;
+        this.nickName = nickName;
+        this.email = email;
+        this.password = password;
+        this.icon = icon;
+    }
+
     @TableField("password")
     private String password;
 

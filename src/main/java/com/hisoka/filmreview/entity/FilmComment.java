@@ -77,6 +77,9 @@ public class FilmComment implements Serializable {
     @TableField("publish_time")
     private LocalDateTime publishTime;
 
+    @TableField(exist = false)
+    private String pubTime;
+
     @ApiModelProperty("顶的数量")
     @TableField("up")
     private Integer up;

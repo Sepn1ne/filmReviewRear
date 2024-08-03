@@ -16,7 +16,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -48,11 +51,19 @@ public class FilmCommentServiceImpl extends ServiceImpl<FilmCommentMapper, FilmC
         int offset = (page-1)*8;
         List<FilmComment> filmComments = filmCommentMapper.getFilmCommentPageOrderByUp(filmId, offset);
 
-        //设置头像
-        // for(FilmComment f : filmComments){
-        //     f.setIcon(QiNiu.getUrl("head",f.getIcon()));
-        // }
-
+        for(FilmComment f : filmComments){
+            Long userId = f.getUserId();
+            if(filmOrderMapper.getHasPurchase(userId,filmId)>=1){
+                f.setHasPurchase(true);
+            }else{
+                f.setHasPurchase(false);
+            }
+        }
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for(FilmComment f : filmComments){
+            f.setPubTime(fmt.format(f.getPublishTime()));
+            System.out.println(f.getPubTime());
+        }
         return Result.ok(filmComments,(long)pages);
     }
 
@@ -67,11 +78,19 @@ public class FilmCommentServiceImpl extends ServiceImpl<FilmCommentMapper, FilmC
         //偏移量
         int offset = (page-1)*8;
         List<FilmComment> filmComments = filmCommentMapper.getFilmCommentPageOrderByPub(filmId, offset);
-
-        //设置头像
-        // for(FilmComment f : filmComments){
-        //     f.setIcon(QiNiu.getUrl("head",f.getIcon()));
-        // }
+        for(FilmComment f : filmComments){
+            Long userId = f.getUserId();
+            if(filmOrderMapper.getHasPurchase(userId,filmId)>=1){
+                f.setHasPurchase(true);
+            }else{
+                f.setHasPurchase(false);
+            }
+        }
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for(FilmComment f : filmComments){
+            f.setPubTime(fmt.format(f.getPublishTime()));
+            System.out.println(f.getPubTime());
+        }
         return Result.ok(filmComments,(long)pages);
     }
 
@@ -157,6 +176,11 @@ public class FilmCommentServiceImpl extends ServiceImpl<FilmCommentMapper, FilmC
             }else{
                 f.setHasPurchase(false);
             }
+        }
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for(FilmComment f : filmCommentList){
+            f.setPubTime(fmt.format(f.getPublishTime()));
+            System.out.println(f.getPubTime());
         }
         return Result.ok(filmCommentList);
     }

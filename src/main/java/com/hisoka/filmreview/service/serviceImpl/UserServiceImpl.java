@@ -11,6 +11,8 @@ import com.hisoka.filmreview.entity.User;
 import com.hisoka.filmreview.mapper.UserMapper;
 import com.hisoka.filmreview.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hisoka.filmreview.utils.MD5Util;
+import com.hisoka.filmreview.utils.MailClient;
 import com.hisoka.filmreview.utils.QiNiu;
 import com.hisoka.filmreview.utils.RedisConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +46,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private MailClient mailClient;
+
     @Override
     public Result getCode(String email) {
         //1.如果邮箱为空则返回错误
@@ -62,6 +67,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String key = RedisConstants.LOGIN_CODE + email;
         //5.将该键值对存入Redis，并设置有效时间
         stringRedisTemplate.opsForValue().set(key,code, Duration.ofSeconds(60));
+        //6.将验证码发送至用户邮箱
+        mailClient.sendMail(email,"影视点评系统验证码","影视点评系统验证码为:" + code);
         return Result.ok();
     }
 
@@ -85,9 +92,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(count >= 1){
             return Result.fail("该邮箱已经被注册!");
         }
-        //3.将form存入user，然后存入数据库
+        //3.对user的密码进行加密，并将form存入user，然后存入数据库
         User user = new User();
         BeanUtils.copyProperties(form,user);
+        user.setPassword(MD5Util.encryptToMD5(user.getPassword()));
         int i = userMapper.insert(user);
         System.out.println(i);
         if(i == 1){
@@ -101,7 +109,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Result loginByPwd(LoginByPwdForm form) throws UnsupportedEncodingException {
         //1.先查询是否存在该用户
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.eq("email",form.getEmail()).eq("password",form.getPassword());
+        String pwd = MD5Util.encryptToMD5(form.getPassword());
+        userQueryWrapper.eq("email",form.getEmail()).eq("password",pwd);
         User user = userMapper.selectOne(userQueryWrapper);
         if(user == null){
             return Result.fail("登陆失败！不存在该用户");

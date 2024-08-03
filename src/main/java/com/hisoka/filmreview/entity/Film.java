@@ -37,6 +37,10 @@ public class Film implements Serializable {
     @TableField("film_name")
     private String filmName;
 
+    @ApiModelProperty("电影评分")
+    @TableField("score")
+    private Float score;
+
     @ApiModelProperty("电影封面链接")
     @TableField("cover")
     private String cover;

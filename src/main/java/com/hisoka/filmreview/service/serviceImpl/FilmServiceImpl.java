@@ -9,7 +9,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hisoka.filmreview.dto.Result;
 import com.hisoka.filmreview.entity.Film;
+import com.hisoka.filmreview.entity.FilmScore;
 import com.hisoka.filmreview.mapper.FilmMapper;
+import com.hisoka.filmreview.mapper.FilmScoreMapper;
 import com.hisoka.filmreview.service.FilmService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hisoka.filmreview.utils.QiNiu;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * <p>
@@ -35,6 +39,9 @@ public class FilmServiceImpl extends ServiceImpl<FilmMapper, Film> implements Fi
 
     @Resource
     private FilmMapper filmMapper;
+
+    @Resource
+    private FilmScoreMapper filmScoreMapper;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
@@ -106,5 +113,17 @@ public class FilmServiceImpl extends ServiceImpl<FilmMapper, Film> implements Fi
             return Result.fail("不存在该电影！");
         }
         return Result.ok(film.getId());
+    }
+
+    @Override
+    public void synchFilmScore() {
+        List<Film> films = filmMapper.selectList(new QueryWrapper<Film>().eq("deleted", 0));
+        for(Film f : films){
+            FilmScore fs = filmScoreMapper.selectOne(new QueryWrapper<FilmScore>().eq("film_id", f.getId()));
+            DecimalFormat decimalFormat = new DecimalFormat("#.0");
+            String format = decimalFormat.format(fs.getNormalScore() / 2);
+            f.setScore(Float.parseFloat(format));
+            filmMapper.updateById(f);
+        }
     }
 }

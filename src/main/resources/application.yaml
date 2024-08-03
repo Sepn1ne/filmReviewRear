@@ -34,7 +34,18 @@ spring:
     username: root
     password: Miaobu123456_
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  #MailProperties
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 737711852@qq.com
+    password: doxmvihsluvabebj
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
 # 控制台打印sql语句
 mybatis-plus:
   configuration:

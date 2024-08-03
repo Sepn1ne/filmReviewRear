@@ -34,9 +34,9 @@ public class CinemaScreeningServiceImpl extends ServiceImpl<CinemaScreeningMappe
     private CinemaScreeningMapper cinemaScreeningMapper;
 
     @Override
-    public Result getStockByDistrictId(Integer districtId,Long filmId) {
+    public Result getStockByDistrictId(Integer districtId,Long filmId,Date stickDate) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
+        calendar.setTime(stickDate);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MINUTE, 0);

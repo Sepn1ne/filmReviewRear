@@ -32,9 +32,9 @@ public class CinemaScreeningController {
     private CinemaScreeningService cinemaScreeningService;
 
     //根据districtId查询当日余票
-    @GetMapping("/stock/{districtId}/{filmId}")
-    public Result getStock(@PathVariable("districtId") Integer districtId,@PathVariable("filmId") Long filmId){
-        return cinemaScreeningService.getStockByDistrictId(districtId,filmId);
+    @GetMapping("/stock/{districtId}/{filmId}/{stickDate}")
+    public Result getStock(@PathVariable("districtId") Integer districtId,@PathVariable("filmId") Long filmId,@PathVariable("stickDate") Date stickDate){
+        return cinemaScreeningService.getStockByDistrictId(districtId,filmId,stickDate);
     }
 }
 
